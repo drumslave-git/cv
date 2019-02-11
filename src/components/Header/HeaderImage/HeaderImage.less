@@ -1,0 +1,101 @@
+.headerImage {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.canvas{
+  //height: 100%;
+  //width: 100%;
+  cursor: crosshair;
+  z-index: 1;
+  position: relative;
+}
+
+.overlayWrapper {
+  position: absolute;
+  display: flex;
+  z-index: 2;
+  pointer-events: none;
+
+  .overlay {
+    background-size: cover;
+  }
+
+  button{
+    display: none;
+  }
+
+  &.overlayEditMode{
+    pointer-events: auto;
+
+    .overlay {
+      cursor: move;
+    }
+
+    button{
+      display: block;
+    }
+  }
+}
+.overlayThumb{
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  margin-right: 5px;
+}
+
+.overlayConfig{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  margin-bottom: 5px;
+  background: grey;
+  position: absolute;
+
+  label{
+    display: block;
+
+    input{
+      margin-left: 5px;
+    }
+  }
+}
+
+.target{
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border: 1px solid black;
+  box-sizing: content-box;
+  pointer-events: none;
+  display: none;
+}
+
+.toolbar{
+  background: grey;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  padding: 5px;
+  position: absolute;
+}
+.toolbarTitle{
+  cursor: move;
+  padding: 5px 0;
+}
+.layers{
+  width: 100%;
+}
+
+.brashSize{
+  width: 2em;
+  vertical-align: middle;
+}
+
+.colorPicker{
+  vertical-align: middle;
+}

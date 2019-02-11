@@ -1,0 +1,10 @@
+[
+  {
+    "type": "basic",
+    "w": 2,
+    "h": 1,
+    "color": "red",
+    "colorVariety": 0.3,
+    "shadow": true
+  }
+]

@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import Color from 'color';
 import Draggable from 'react-draggable';
-import style from './HeaderImage.less';
-import DrawingMachine from '../../../helpers/DrawingMachine';
-import {randFloat, arrayMove} from '../../../helpers/general';
-import {getWindowData} from '../../../data/objects/objects';
+import style from './PixelPaint.less';
+import DrawingMachine from '../../helpers/DrawingMachine';
+import {randFloat, arrayMove} from '../../helpers/general';
+import {getWindowData} from '../../data/objects/objects';
 import ColorPicker from 'rc-color-picker';
 import 'rc-color-picker/dist/rc-color-picker.min.css'
+import PixelCanvas from './PixelCanvas';
 
-class HeaderImage extends Component {
+class PixelPaint extends Component {
     constructor(props) {
         super(props);
 
@@ -42,158 +43,11 @@ class HeaderImage extends Component {
         this.saveLayers();
         this.saveLayersOrder();
 
-        this.containerRef = React.createRef();
-
-        this.dm = null;
-        this.canvasElRef = null;
         this.targetRef = React.createRef();
-        this.canvasRef = (ref) => {
-            this.canvasElRef = ref;
-            if(ref) {
-                const ctx = ref.getContext('2d');
-                this.dm = new DrawingMachine(ctx);
-            }
-        };
+
         this.pixels = this.getPixels();
-        this.mouseButton = 0;
-        this.mouseMoveStart = [0,0];
-        this.canvasTranslate = [0, 0];
         this.draggablePositions = this.getDraggablePositions();
     }
-
-    componentDidMount() {
-        this.draw();
-        this.canvasElRef.addEventListener('mousedown', this.startDraw);
-        this.canvasElRef.addEventListener('mouseup', this.stopDraw);
-        this.canvasElRef.addEventListener('mousemove', this.drawTarget);
-        this.canvasElRef.addEventListener('wheel', this.changeCanvasScale);
-        this.canvasElRef.addEventListener('contextmenu', (e) => e.preventDefault());
-    }
-
-    changeCanvasScale = (e) => {
-        const {deltaY} = e;
-        const nextState = {
-            canvasScale: 1
-        };
-        if(deltaY > 0){
-            nextState.canvasScale = Math.max(1, this.state.canvasScale - 0.5);
-        }else{
-            nextState.canvasScale =  this.state.canvasScale + 0.5;
-        }
-        if(nextState.canvasScale === 1){
-            nextState['canvasTranslate'] = [0,0];
-        }
-        this.setState(nextState);
-    };
-
-    moveCanvas = (e) => {
-        const {pageX, pageY} = e;
-        const deltaX = this.mouseMoveStart[0] - pageX;
-        const deltaY = this.mouseMoveStart[1] - pageY;
-        console.log('moveCanvas', deltaX, deltaY);
-        this.mouseMoveStart = [pageX, pageY];
-        this.canvasTranslate = [this.canvasTranslate[0] - deltaX, this.canvasTranslate[1] - deltaY];
-        if(this.state.canvasScale > 1) {
-            this.setState({
-                canvasTranslate: this.canvasTranslate
-            })
-        }
-    };
-
-    startDraw = (e) => {
-        this.mouseMoveStart = [e.pageX, e.pageY];
-        this.mouseButton = e.button;
-        if(this.mouseButton === 2) {
-            e.preventDefault();
-        }
-        this.canvasElRef.addEventListener('mousemove', this.drawPixel);
-        this.canvasElRef.removeEventListener('click', this.drawPixel);
-    };
-
-    stopDraw = () => {
-        this.canvasElRef.removeEventListener('mousemove', this.drawPixel);
-        this.canvasElRef.addEventListener('click', this.drawPixel);
-    };
-
-    drawTarget = (e) => {
-        const {pageX, pageY} = e;
-        // console.log('drawTarget', pageX, pageY);
-        this.targetRef.current.style.left = `${Math.round((pageX - this.dm.pixelSize) / this.dm.pixelSize) * this.dm.pixelSize}px`
-        this.targetRef.current.style.top = `${Math.round((pageY - this.dm.pixelSize) / this.dm.pixelSize) * this.dm.pixelSize}px`
-    };
-
-    drawPixel = (e) => {
-        const {pageX, pageY} = e;
-        // console.log('drawPixel', pageX, pageY);
-        const box = this.canvasElRef.getBoundingClientRect();
-        const x = Math.round(((pageX - box.x) - this.dm.pixelSize) / this.dm.pixelSize) * this.dm.pixelSize;
-        const y = Math.round(((pageY - box.y) -this.dm.pixelSize) / this.dm.pixelSize) * this.dm.pixelSize;
-        this.pixels[this.state.currentLayer] = this.pixels[this.state.currentLayer] || {};
-        if(!this.state.colorPickerActive) {
-            switch (this.mouseButton) {
-                case 0:
-                    for(let i = 0; i < this.state.brashSize; i++) {
-                        for(let j = 0; j < this.state.brashSize; j++) {
-                            let virtualDraw = false;
-                            const pixelX = x + i;
-                            const pixelY = y + j;
-                            const curLayerOrder = this.state.layersOrder.indexOf(this.state.currentLayer);
-                            if(curLayerOrder !== 0){
-                                for(let o = 0; o < curLayerOrder; o++) {
-                                    const layerId = this.state.layersOrder[o];
-                                    if (!this.state.hiddenLayers.includes(layerId)){
-                                        if (this.pixels[layerId] && this.pixels[layerId][`${pixelX},${pixelY}`]) {
-                                            virtualDraw = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            if(!virtualDraw) {
-                                this.dm.drawPixel(
-                                    this.state.color,
-                                    pixelX,
-                                    pixelY
-                                );
-                            }
-                            this.pixels[this.state.currentLayer][`${pixelX},${pixelY}`] = {x: pixelX, y: pixelY, color: this.state.color};
-                        }
-                    }
-                    this.savePixels();
-                    break;
-                case 1:
-                    this.moveCanvas(e);
-                    break;
-                case 2:
-                    for (let i = 0; i < this.state.brashSize; i++) {
-                        for (let j = 0; j < this.state.brashSize; j++) {
-                            const pixelX = x + i;
-                            const pixelY = y + j;
-                            if (this.pixels[this.state.currentLayer][`${pixelX},${pixelY}`]) {
-                                this.dm.removePixel(
-                                    pixelX,
-                                    pixelY
-                                );
-                                this.pixels[this.state.currentLayer][`${pixelX},${pixelY}`] = null;
-                            }
-                        }
-                    }
-                    this.savePixels();
-            }
-        }else{
-            if(this.pixels[this.state.currentLayer][`${x},${y}`]){
-                this.setState({
-                    color: this.pixels[this.state.currentLayer][`${x},${y}`].color,
-                    colorPickerActive: false
-                })
-            }else{
-                this.setState({
-                    color: this.state.canvasColor,
-                    colorPickerActive: false
-                })
-            }
-        }
-    };
 
     getDraggablePosition = (id) => {
         if(this.draggablePositions[id]){
@@ -230,6 +84,10 @@ class HeaderImage extends Component {
     getOverlays = () => {
         const layers = localStorage.getItem('overlays');
         return layers ? JSON.parse(layers) : [];
+    };
+
+    getColor = () => {
+        return this.state.color;
     };
 
     saveDraggablePosition(id, x, y){
@@ -278,59 +136,6 @@ class HeaderImage extends Component {
     saveOverlays = () => {
         localStorage.setItem('overlays', JSON.stringify(this.state.overlays))
     };
-
-    componentDidUpdate() {
-        this.draw();
-    }
-
-    draw() {
-            if(this.dm && this.containerRef && this.canvasElRef){
-                this.canvasElRef.width = this.containerRef.current.clientWidth;
-                this.canvasElRef.height = this.containerRef.current.clientHeight;
-                if(Object.keys(this.pixels).length){
-                    Array.from(this.state.layersOrder).reverse().map(layerId => {
-                        const layerPixels = this.pixels[layerId];
-                        if(layerPixels && !this.state.hiddenLayers.includes(layerId)){
-                            Object.keys(layerPixels).filter(pixel => layerPixels[pixel] !== null).forEach(pixel => {
-                                this.dm.drawPixel(
-                                    layerPixels[pixel].color,
-                                    layerPixels[pixel].x,
-                                    layerPixels[pixel].y
-                                );
-                            });
-                        }
-                    });
-                }
-                // const xSUN = this.state.sunPosition.x;
-                // // const xBreacks = Math.round(this.containerRef.current.clientWidth / this.dm.pixelSize);
-                // const yBreacks = Math.round(this.containerRef.current.clientHeight / this.dm.pixelSize);
-                // const xBreacks = 30;
-                // this.dm.drawSun(xSUN, 0);
-                // const baseColor = Color('#d2be9b');
-                // // const baseColor = Color('rgba(255,255,0,0.)');
-                // for(let i = 0; i < xBreacks; i += 10) {
-                //     for(let j = 0; j < yBreacks; j += 5) {
-                //         console.count('break');
-                //         // console.log(i, j);
-                //         this.dm.drawRect('black', i, j, 10, 5, {
-                //             colorVariety: 0.2,
-                //             shadow: true
-                //         });
-                //         this.dm.drawRect(baseColor.rotate(randFloat(0, 10)).hsl().string(), i + 1, j + 1, 9, 4, {
-                //             colorVariety: 0.2,
-                //             shadow: true
-                //         });
-                //
-                //     }
-                // }
-                // getWindowData(60, 10, 22, 30, 2, '#895641').forEach(obj => {
-                //     this.dm.drawRect(obj.color, obj.x, obj.y, obj.w, obj.h, obj.config);
-                // });
-                // getWindowData(2, 2, 9, 14, 1, 'white', true).forEach(obj => {
-                //     this.dm.drawRect(obj.color, obj.x, obj.y, obj.w, obj.h, obj.config);
-                // });
-            }
-    }
 
     editLayer = (id = null) => {
         const layersOrder = Array.from(this.state.layersOrder);
@@ -441,6 +246,12 @@ class HeaderImage extends Component {
         }, this.saveOverlays);
     };
 
+    canvasStyle = {
+        width: '100%',
+        height: '100%',
+        position: 'absolute'
+    };
+
     render() {
         const currentLayerIsHidden = this.state.hiddenLayers.includes(this.state.currentLayer);
         return (
@@ -484,15 +295,10 @@ class HeaderImage extends Component {
                             </Draggable>
                         );
                     })}
-                    <canvas
-                        className={style.canvas}
-                        ref={this.canvasRef}
-                        style={{
-                            background: this.state.canvasColor,
-                            transform: `scale(${this.state.canvasScale}) translate(${this.state.canvasTranslate[0] / this.state.canvasScale}px, ${this.state.canvasTranslate[1] / this.state.canvasScale}px)`
-                        }}
+                    <PixelCanvas
+                        style={this.canvasStyle}
+                        getColor={this.getColor}
                     />
-                    <div className={style.target} ref={this.targetRef}/>
                 </div>
                 <Draggable
                     defaultPosition={this.getDraggablePosition('toolbar')}
@@ -678,4 +484,4 @@ class HeaderImage extends Component {
     }
 }
 
-export default HeaderImage;
+export default PixelPaint;

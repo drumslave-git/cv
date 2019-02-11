@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header"
+import PixelPaint from "../components/PixelPaint"
 
 class App extends React.Component {
 	constructor(props) {
@@ -8,7 +8,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<Header />
+			<PixelPaint />
 		)
 	}
 }

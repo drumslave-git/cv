@@ -1,0 +1,8 @@
+{
+  "name": "PixelPaint",
+  "version": "1.0.0",
+  "main": "./PixelPaint.jsx",
+  "dependencies": {
+
+  }
+}

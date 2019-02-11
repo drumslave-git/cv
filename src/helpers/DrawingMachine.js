@@ -3,15 +3,29 @@ import {randFloat} from './general';
 
 class DrawingMachine {
     ctx = null;
-    pixelSize = 5;
+    pixelSize = 10;
     shadowSize = 1;
+    numRows = 0;
+    numCols = 0;
     lightSource = {
         x: 0,
         y: 0
     };
+    canvasData = [];
+    dirtyIndexes=[];
+    baseColor = 'black';
+    eraseColor = 'transparent';
 
     constructor(ctx){
         this.ctx = ctx;
+        this.ctx.imageSmoothingEnabled = false;
+        this.numRows =  Math.floor(this.ctx.canvas.height / this.pixelSize);
+        this.numCols =  Math.floor(this.ctx.canvas.width / this.pixelSize);
+    }
+
+    setGridDimension(w = this.ctx.canvas.width, h = this.ctx.canvas.height){
+        this.numRows =  Math.floor(h / this.pixelSize);
+        this.numCols =  Math.floor(w / this.pixelSize);
     }
 
     setPixelSize = (size) => {
@@ -22,20 +36,106 @@ class DrawingMachine {
         this.shadowSize = size;
     };
 
-    drawPixel = (color = 'rgb(0, 0, 0)', x = 0, y = 0, rectConfig = {}) => {
-        const { colorVariety = 0 } = rectConfig;
-        let fillColor = Color(color);
-        if(colorVariety > 0) {
-            const variant = randFloat(0, colorVariety);
-            if(Math.round(variant * 100) % 2) {
-                fillColor = fillColor.lighten(variant);
-            } else {
-                fillColor = fillColor.darken(variant);
+    isValidRow = (row) => row >= 0 && row <= this.numCols - 1;
+    isValidCol = (col) => col >= 0 && col <= this.numCols - 1;
+
+    idxToRowCol = (idx) => {
+        const {0: col, 1: row} = idx.split('X');
+        return {row: Number(row), col: Number(col)};
+    };
+
+    coordsToIdx = (X, Y) => {
+        let col = Math.floor(X / this.pixelSize);
+        let row = Math.floor(Y / this.pixelSize);
+
+        return `${col}X${row}`;
+    };
+
+    drawPixel = (x, y, color = this.eraseColor, virtual = false) => {
+        if ((x >= this.ctx.canvas.width || x <=0 ) || (y >= this.ctx.canvas.height || y <= 0)) { return false; }
+        return this.setData(this.coordsToIdx(x, y), color, virtual);
+    };
+
+    setData = (idx, color = this.baseColor, virtual = false) => {
+        if (this.dirtyIndexes.includes(idx)) { return false; }
+
+        this.canvasData[idx] = color;
+        if(!virtual) {
+            this.dirtyIndexes.push(idx);
+        }
+        return {idx, color};
+    };
+
+    colorBox = (box, color = this.baseColor) => {
+        const { row, col } = box;
+        if (!this.isValidCol(col) || !this.isValidRow(row)) { return false; }
+        this.ctx.fillStyle = color;
+        this.ctx.clearRect(col*this.pixelSize, row*this.pixelSize, this.pixelSize, this.pixelSize - 1);
+        this.ctx.beginPath();
+        this.ctx.fillRect(col*this.pixelSize, row*this.pixelSize, this.pixelSize, this.pixelSize);
+        this.ctx.closePath();
+        this.reOutline(row, col);
+    };
+
+    reOutline = (row, col) => {
+        this.ctx.lineWidth = 1;
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.ctx.translate(0.5, 0.5); //pad and decimal place
+        this.ctx.strokeStyle = 'rgb(200,200,200)';
+        //draw vertical line HEIGHT length, x=i
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(col*this.pixelSize, row*this.pixelSize);
+        // this.ctx.lineTo((col + 1)*this.pixelSize, row*this.pixelSize);
+        // this.ctx.stroke();
+        // this.ctx.closePath();
+        this.ctx.beginPath();
+        this.ctx.moveTo(col*this.pixelSize, row*this.pixelSize);
+        this.ctx.lineTo(col*this.pixelSize, (row+1)*this.pixelSize);
+        this.ctx.stroke();
+        this.ctx.lineTo((col+1)*this.pixelSize, (row+1)*this.pixelSize);
+        this.ctx.stroke();
+        this.ctx.lineTo((col+1)*this.pixelSize, row*this.pixelSize);
+        this.ctx.stroke();
+        this.ctx.lineTo(col*this.pixelSize, row*this.pixelSize);
+        this.ctx.stroke();
+        this.ctx.closePath();
+    };
+
+    drawData = (once = false) => {
+        for (let i=0; i < this.dirtyIndexes.length ; i++) {
+            let color = this.canvasData[this.dirtyIndexes[i]];
+            this.colorBox(this.idxToRowCol(this.dirtyIndexes[i]), color);
+        }
+        this.dirtyIndexes=[];
+        if(!once) {
+            requestAnimationFrame(() => this.drawData());
+        }
+    };
+
+    drawGrid () {
+        for(let x = 0; x <= this.numCols; x +=1 ){
+            for(let y = 0; y <= this.numRows; y += 1){
+                const idx = `${x}X${y}`;
+                this.dirtyIndexes.push(idx);
+                this.canvasData[idx] = this.eraseColor;
             }
         }
-        this.ctx.fillStyle = fillColor.hsl().string();
-        this.ctx.fillRect(x, y, this.pixelSize, this.pixelSize);
-    };
+    }
+
+    // drawPixel = (color = 'rgb(0, 0, 0)', x = 0, y = 0, rectConfig = {}) => {
+    //     const { colorVariety = 0 } = rectConfig;
+    //     let fillColor = Color(color);
+    //     if(colorVariety > 0) {
+    //         const variant = randFloat(0, colorVariety);
+    //         if(Math.round(variant * 100) % 2) {
+    //             fillColor = fillColor.lighten(variant);
+    //         } else {
+    //             fillColor = fillColor.darken(variant);
+    //         }
+    //     }
+    //     this.ctx.fillStyle = fillColor.hsl().string();
+    //     this.ctx.fillRect(x, y, this.pixelSize, this.pixelSize);
+    // };
 
     removePixel = (x = 0, y = 0) => {
         this.ctx.clearRect(x, y, this.pixelSize, this.pixelSize);

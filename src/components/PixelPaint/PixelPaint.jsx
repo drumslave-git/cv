@@ -18,6 +18,7 @@ class PixelPaint extends Component {
                 x: 0,
                 y: 0
             },
+
             layers: this.getLayers(),
             layersOrder: this.getLayersOrder(),
             hiddenLayers: this.getHiddenLayers(),
@@ -43,9 +44,8 @@ class PixelPaint extends Component {
         this.saveLayers();
         this.saveLayersOrder();
 
-        this.targetRef = React.createRef();
-
         this.pixels = this.getPixels();
+        this.state['pixels'] = this.getVisiblePixels(true);
         this.draggablePositions = this.getDraggablePositions();
     }
 
@@ -97,6 +97,13 @@ class PixelPaint extends Component {
 
     saveDraggablePositions = () => {
         localStorage.setItem('draggablePositions', JSON.stringify(this.draggablePositions))
+    };
+
+    savePixel = (pixel) => {
+        const { currentLayer } = this.state;
+        this.pixels[currentLayer] = this.pixels[currentLayer] || {};
+        this.pixels[currentLayer][pixel.idx] = pixel;
+        this.savePixels();
     };
 
     savePixels = () => {
@@ -252,6 +259,37 @@ class PixelPaint extends Component {
         position: 'absolute'
     };
 
+    getVisiblePixels(get = false){
+        const { layersOrder = [], hiddenLayers = [] } = this.state;
+        let pixels = {};
+        layersOrder.forEach(layerId => {
+            if(!hiddenLayers.includes(layerId)) {
+                if(this.pixels[layerId]){
+                    pixels = {...pixels, ...this.pixels[layerId]};
+                }
+            }
+        });
+
+        if(!get){
+            this.setState({pixels});
+        }
+
+        return pixels;
+    }
+
+    toggleLayerVisibility(show){
+        const hiddenLayers = Array.from(this.state.hiddenLayers);
+        if(show){
+            hiddenLayers.splice(hiddenLayers.indexOf(this.state.currentLayer), 1);
+        }else{
+            hiddenLayers.push(this.state.currentLayer);
+        }
+        this.setState({hiddenLayers}, () => {
+                this.saveHiddenLayers();
+                this.getVisiblePixels();
+        });
+    }
+
     render() {
         const currentLayerIsHidden = this.state.hiddenLayers.includes(this.state.currentLayer);
         return (
@@ -297,7 +335,9 @@ class PixelPaint extends Component {
                     })}
                     <PixelCanvas
                         style={this.canvasStyle}
+                        pixels={this.state.pixels}
                         getColor={this.getColor}
+                        savePixel={this.savePixel}
                     />
                 </div>
                 <Draggable
@@ -373,18 +413,10 @@ class PixelPaint extends Component {
                             <button onClick={() => this.editLayer()}>Add</button>
                             <button onClick={() => this.editLayer(this.state.currentLayer)}>Edit</button>
                             {!currentLayerIsHidden && (
-                                <button onClick={() => {
-                                    const hiddenLayers = Array.from(this.state.hiddenLayers);
-                                    hiddenLayers.push(this.state.currentLayer);
-                                    this.setState({hiddenLayers}, this.saveHiddenLayers);
-                                }}>Hide</button>
+                                <button onClick={() => this.toggleLayerVisibility()}>Hide</button>
                             )}
                             {currentLayerIsHidden && (
-                                <button onClick={() => {
-                                    const hiddenLayers = Array.from(this.state.hiddenLayers);
-                                    hiddenLayers.splice(hiddenLayers.indexOf(this.state.currentLayer), 1);
-                                    this.setState({hiddenLayers}, this.saveHiddenLayers);
-                                }}>Show</button>
+                                <button onClick={() => this.toggleLayerVisibility(true)}>Show</button>
                             )}
                             {Object.keys(this.state.layers).length > 1 && (
                                 <React.Fragment>

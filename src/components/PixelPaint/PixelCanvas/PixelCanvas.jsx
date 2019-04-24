@@ -81,7 +81,11 @@ class PixelCanvas extends React.PureComponent {
         this.canvasElRef.addEventListener('click', this.drawPixel);
     };
     drawPixel = (e) => {
-        const {canDraw = null, getColor} = this.props;
+        const {
+            canDraw = null,
+            getColor,
+            savePixel = () => {},
+        } = this.props;
         const {offsetX: x, offsetY: y} = e;
         let virtualDraw = false;
         let color = this.dm.baseColor;
@@ -89,6 +93,7 @@ class PixelCanvas extends React.PureComponent {
             color = getColor();
         }
         const pixel = this.dm.drawPixel(x, y, color, virtualDraw);
+        savePixel(pixel);
     };
     // drawPixel = (e) => {
     //     const {offsetX: x, offsetY: y} = e;
@@ -153,9 +158,8 @@ class PixelCanvas extends React.PureComponent {
             this.dm.drawData();
 
             Object.keys(pixels).filter(pixel => pixels[pixel] !== null).forEach(pixel => {
-                this.dm.drawPixel(
-                    pixels[pixel].x,
-                    pixels[pixel].y,
+                this.dm.setData(
+                    pixels[pixel].idx,
                     pixels[pixel].color,
                 );
             });

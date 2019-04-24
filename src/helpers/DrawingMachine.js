@@ -103,6 +103,9 @@ class DrawingMachine {
 
     drawData = (once = false) => {
         for (let i=0; i < this.dirtyIndexes.length ; i++) {
+            if(!this.dirtyIndexes[i]){
+                continue;
+            }
             let color = this.canvasData[this.dirtyIndexes[i]];
             this.colorBox(this.idxToRowCol(this.dirtyIndexes[i]), color);
         }

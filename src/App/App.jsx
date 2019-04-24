@@ -1,5 +1,7 @@
 import React from "react";
-import PixelPaint from "../components/PixelPaint"
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import PixelPaint from "../components/PixelPaint";
+import {Main} from "../components/Main";
 
 class App extends React.Component {
 	constructor(props) {
@@ -8,7 +10,10 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<PixelPaint />
+			<Router>
+				<Route path="/" exact component={Main} />
+				<Route path="/pixelPaint" exact component={PixelPaint} />
+			</Router>
 		)
 	}
 }

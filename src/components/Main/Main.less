@@ -1,0 +1,153 @@
+@import "~@/components/Panel/Panel.less";
+
+.bg-image{
+  background-color: #000;
+  background-image: url('https://source.unsplash.com/featured/?dark');
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 110%;
+  height: 110%;
+  filter: blur(20px) grayscale(100%);
+  background-size: 100%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 60px;
+}
+
+.generalPanel{
+  display: flex;
+
+  .fullWidth{
+    flex: 1 0 auto;
+  }
+
+  table {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+
+    tr {
+      td {
+        padding: 10px;
+        vertical-align: top;
+        width: 50%;
+
+        &:first-of-type {
+          color: #929292;
+        }
+      }
+    }
+  }
+
+  &.mainPanel{
+    table{
+      tr {
+        td{
+          width: auto;
+
+          &:first-of-type {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  table + table{
+    margin-top: 20px;
+    border-top: 3px solid #929292;
+  }
+}
+
+@keyframes madness {
+  0%, 100%  { filter: blur(0px); }
+  48%, 52%  { filter: blur(0px); }
+  50% { filter: blur(10px); }
+}
+
+@keyframes tremble {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.mainPicture{
+  position: absolute;
+  width: 25%;
+  height: 100%;
+  background-image: url('~@assets/photo2.jpg');
+  background-size: auto 100%;
+  background-position: center;
+  filter: grayscale(60%) contrast(120%);
+
+  &.picMadness{
+    background-image: url('~@assets/alt.gif');
+    image-rendering: pixelated;
+    //animation-name: madness;
+    //animation-duration: 4s;
+    //filter: blur(8px);
+    animation: madness 10s infinite;
+    animation-delay: 10s;
+  }
+}
+
+.mainInfo {
+  padding-left: 25%;
+}
+
+
+.wsLogo{
+  border-radius: 100%;
+  width: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.skillLevel{
+  width: 100%;
+  height: 20px;
+  border: 1px solid #929292;
+  position: relative;
+
+  .skillPoint{
+    width: calc(10% - 4px);
+    height: calc(100% - 4px);
+    background: #ae0001;
+    display: inline-block;
+    margin: 2px;
+    box-sizing: border-box;
+    opacity: 1;
+    transition: width 1s, margin .3s, opacity .3s;
+
+    &.hidden{
+      opacity: 0;
+
+      &.removed{
+        width: 0;
+        margin: 2px 0;
+      }
+    }
+
+    &:hover{
+      animation: tremble .3s infinite;
+    }
+  }
+}

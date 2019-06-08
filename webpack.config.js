@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
   entry: './src/index.js',
@@ -43,11 +44,23 @@ module.exports = {
             loader: "less-loader"
           }
         ]
+      },
+      {
+        test: /\.(gif|svg|jpg|png)$/,
+        loader: "file-loader",
       }
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    modules:    [
+      path.resolve(__dirname, 'src'),
+      'node_modules',
+    ],
+    alias:      {
+      '@assets':   path.resolve(__dirname, 'src/assets'),
+      '@':   path.resolve(__dirname, 'src'),
+    },
   },
   output: {
     path: __dirname + '/dist',
@@ -59,6 +72,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: './dist',
+    historyApiFallback: true,
     hot: true
   }
 };

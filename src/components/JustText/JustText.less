@@ -1,0 +1,22 @@
+.justText{
+  display: contents;
+}
+.groupOfWords{
+  display: inline-block;
+  cursor: none;
+
+  .singleWord{
+    display: none;
+    &:first-of-type{
+      display: inline-block;
+    }
+  }
+  &:hover{
+    .singleWord:first-of-type{
+      display: none;
+    }
+    .singleWord:last-of-type{
+      display: inline-block;
+    }
+  }
+}

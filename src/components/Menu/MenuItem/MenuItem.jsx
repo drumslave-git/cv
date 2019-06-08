@@ -1,9 +1,11 @@
 import React from "react";
-import style from "./MenuItem.less";
 import { Link } from "react-router-dom";
+import cn from 'classnames';
+
+import style from "./MenuItem.less";
 
 const MenuItem = (props) => (
-  <li className={style.menuItem}>
+  <li className={cn(style.menuItem, 'glitchText')}>
       <Link to={props.to}>{props.label}</Link>
   </li>
 );

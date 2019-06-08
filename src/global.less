@@ -1,0 +1,49 @@
+@import "~@/variables.less";
+
+@keyframes ~":global(glitchText)" {
+  0% {
+    text-shadow: 5px 4px @redColor, -5px -6px @blueColor;
+  }
+  25% {
+    text-shadow: -5px -6px @redColor, 5px 4px @blueColor;
+  }
+  50% {
+    text-shadow: 5px -4px @redColor, -8px 4px @blueColor;
+  }
+  75% {
+    text-shadow: -8px -4px @redColor, -5px -4px @blueColor;
+  }
+  100% {
+    text-shadow: -5px 0 @redColor, 5px -4px @blueColor;
+  }
+}
+@fadeTo: 50%;
+@keyframes ~":global(glitchBlock)" {
+  0% {
+    box-shadow: 5px 4px fade(@redColor, @fadeTo), -5px -6px fade(@blueColor, @fadeTo);
+  }
+  25% {
+    box-shadow: -5px -6px fade(@redColor,@fadeTo), 5px 4px fade(@blueColor, @fadeTo);
+  }
+  50% {
+    box-shadow: 5px -4px fade(@redColor, @fadeTo), -8px 4px fade(@blueColor, @fadeTo);
+  }
+  75% {
+    box-shadow: -8px -4px fade(@redColor, @fadeTo), -5px -4px fade(@blueColor, @fadeTo);
+  }
+  100% {
+    box-shadow: -5px 0 fade(@redColor, @fadeTo), 5px -4px fade(@blueColor, @fadeTo);
+  }
+}
+
+:global .glitchText {
+  &:hover {
+    animation: glitchText 200ms infinite;
+  }
+}
+
+:global .glitchBlock {
+  &:hover {
+    animation: glitchBlock 300ms infinite;
+  }
+}

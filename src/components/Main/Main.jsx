@@ -150,7 +150,7 @@ class Main extends PureComponent {
                                         </td>
                                         <td>
                                             <JustText
-                                                text={'{#Full stack web developer (PHP + JS)|God#}'}
+                                                text={'{#Full stack web developer (PHP + JS)|React one love#}'}
                                             />
                                         </td>
                                     </tr>

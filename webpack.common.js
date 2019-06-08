@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
-  devtool: 'eval-source-map',
   module: {
     rules: [
       {
@@ -48,6 +49,15 @@ module.exports = {
       {
         test: /\.(gif|svg|jpg|png)$/,
         loader: "file-loader",
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader",
+            options: { minimize: true }
+          }
+        ]
       }
     ]
   },
@@ -67,12 +77,17 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js'
   },
+  optimization: {
+    splitChunks: {
+        chunks: 'all'
+      }
+  },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
-  devServer: {
-    contentBase: './dist',
-    historyApiFallback: true,
-    hot: true
-  }
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebPackPlugin({
+      template: "./src/index.html",
+      filename: "./index.html"
+    }),
+    new FaviconsWebpackPlugin(path.resolve(__dirname, 'src/favicon.png'))
+  ]
 };

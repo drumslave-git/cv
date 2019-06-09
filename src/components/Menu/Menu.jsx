@@ -42,14 +42,16 @@ class Menu extends React.PureComponent {
             this.img.src = `https://api.adorable.io/avatars/90/${this.currentRend}`;
 
             setInterval(() => {
-                this.currentRend = getRandomNum();
-                if(this.currentRend % 3 === 0) {
-                    this.img.src = `https://api.adorable.io/avatars/90/${this.currentRend}`;
-                }else{
-                    if(this.picRef) {
-                        this.picRef.style.backgroundImage = '';
+                requestAnimationFrame(() => {
+                    this.currentRend = getRandomNum();
+                    if(this.currentRend % 3 === 0) {
+                        this.img.src = `https://api.adorable.io/avatars/90/${this.currentRend}`;
+                    }else{
+                        if(this.picRef) {
+                            this.picRef.style.backgroundImage = '';
+                        }
                     }
-                }
+                })
             }, picSwitchDelay)
         }, picSwitchDelay)
     }

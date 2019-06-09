@@ -5,7 +5,7 @@ import cn from 'classnames';
 import style from "./MenuItem.less";
 
 const MenuItem = (props) => (
-  <li className={cn(style.menuItem, 'glitchText')}>
+  <li className={cn(style.menuItem, 'glitchText', props.className)}>
       <Link to={props.to}>{props.label}</Link>
   </li>
 );

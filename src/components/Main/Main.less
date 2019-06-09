@@ -1,4 +1,5 @@
 @import "~@/components/Panel/Panel.less";
+@import "~@/variables.less";
 
 .bg-image{
   background-color: #000;
@@ -22,18 +23,22 @@
 
 .generalPanel{
   display: flex;
+  flex-wrap: wrap;
 
   .fullWidth{
     flex: 1 0 auto;
   }
 
-  table {
+  .table {
+    display: table;
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
 
-    tr {
-      td {
+    .tr {
+      display: table-row;
+      .td {
+        display: table-cell;
         padding: 10px;
         vertical-align: top;
         width: 50%;
@@ -46,9 +51,9 @@
   }
 
   &.mainPanel{
-    table{
-      tr {
-        td{
+    .table{
+      .tr {
+        .td{
           width: auto;
 
           &:first-of-type {
@@ -59,7 +64,7 @@
     }
   }
 
-  table + table{
+  .table + .table{
     margin-top: 20px;
     border-top: 3px solid #929292;
   }
@@ -94,6 +99,7 @@
   width: 25%;
   height: 100%;
   background-image: url('~@assets/photo2.jpg');
+  background-repeat: no-repeat;
   background-size: auto 100%;
   background-position: center;
   filter: grayscale(60%) contrast(120%);
@@ -101,9 +107,6 @@
   &.picMadness{
     background-image: url('~@assets/alt.gif');
     image-rendering: pixelated;
-    //animation-name: madness;
-    //animation-duration: 4s;
-    //filter: blur(8px);
     animation: madness 10s infinite;
     animation-delay: 10s;
   }
@@ -130,7 +133,7 @@
   .skillPoint{
     width: calc(10% - 4px);
     height: calc(100% - 4px);
-    background: #ae0001;
+    background: @redColor;
     display: inline-block;
     margin: 2px;
     box-sizing: border-box;
@@ -148,6 +151,35 @@
 
     &:hover{
       animation: tremble .3s infinite;
+    }
+  }
+}
+
+@media screen and (max-width: 600px){
+  .mainPicture{
+    width: 100%;
+    background-size: 100% auto;
+    height: 300px;
+    position: relative;
+  }
+
+  .mainInfo {
+    padding-left: 0;
+  }
+  .generalPanel {
+    .table {
+      display: block;
+      width: 100%;
+
+      .tr {
+        display: block;
+        width: 100%;
+
+        .td {
+          display: block;
+          width: auto;
+        }
+      }
     }
   }
 }

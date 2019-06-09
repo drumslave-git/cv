@@ -122,76 +122,74 @@ class Main extends PureComponent {
                        >
                            <div className={styles.mainPicture} ref={this.mainPictureRef} />
                            <div className={styles.mainInfo}>
-                               <table>
-                                   <tbody>
-                                    <tr>
-                                        <td>
+                               <div className={styles.table}>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Name
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             <JustText
                                                 text={'{#George|Drum#}'}
                                             />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Last Name
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             <JustText
                                                 text={'{#Tislenko|Slave#}'}
                                             />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Job Title
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             <JustText
                                                 text={'{#Full stack web developer (PHP + JS)|React one love#}'}
                                             />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Age
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             <JustText
                                                 text={`${27 + randInt(1, 2)}`}
                                             />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Location
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             Ukraine, Dnipro
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Languages
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             Russian, Ukrainian, English
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Intro
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             Courteous and enthusiastic, I am interested in IT and everything in its orbit. I recently began to be fascinated by web programming, e.g. developing apps and building websites. Invited to join my friend's start-up company as a front-end developer, I gained experience of working in this area.
                                             As this area complements my studies, I am keen to gain more experience in the field. For this reason, I am looking for a company willing to offer me a placement among their developers. In return, I would offer my full commitment, and be a pleasant and friendly addition to your team.
                                             I am therefore currently looking for a job or an internship as a front-end developer.
-                                        </td>
-                                    </tr>
-                                   </tbody>
-                               </table>
+                                        </div>
+                                    </div>
+                               </div>
                            </div>
                        </Panel>
                        <Panel
@@ -199,189 +197,179 @@ class Main extends PureComponent {
                            title={'Education'}
                            className={styles.generalPanel}
                        >
-                           <table>
-                               <tbody>
-                                   <tr>
-                                       <td>
-                                           <JustText
-                                               text={'{#Dnipropetrovsk State Technical University of Railway Transport|Mordor#}'}
-                                           />
-                                       </td>
-                                       <td>
-                                           <JustText
-                                               text={'{#2007 - 2012|felt like it will never end#}'}
-                                           />
-                                       </td>
-                                   </tr>
-                                   <tr>
-                                       <td>
-                                           Degree
-                                       </td>
-                                       <td>
-                                           Specialist
-                                       </td>
-                                   </tr>
-                                   <tr>
-                                       <td>
-                                           Speciality
-                                       </td>
-                                       <td>
-                                           <JustText
-                                               text={'{#Computer science|professional time waster#}'}
-                                           />
-                                       </td>
-                                   </tr>
-                               </tbody>
-                           </table>
+                           <div className={styles.table}>
+                               <div className={styles.tr}>
+                                   <div className={styles.td}>
+                                       <JustText
+                                           text={'{#Dnipropetrovsk State Technical University of Railway Transport|Mordor#}'}
+                                       />
+                                   </div>
+                                   <div className={styles.td}>
+                                       <JustText
+                                           text={'{#2007 - 2012|felt like it will never end#}'}
+                                       />
+                                   </div>
+                               </div>
+                               <div className={styles.tr}>
+                                   <div className={styles.td}>
+                                       Degree
+                                   </div>
+                                   <div className={styles.td}>
+                                       Specialist
+                                   </div>
+                               </div>
+                               <div className={styles.tr}>
+                                   <div className={styles.td}>
+                                       Speciality
+                                   </div>
+                                   <div className={styles.td}>
+                                       <JustText
+                                           text={'{#Computer science|professional time waster#}'}
+                                       />
+                                   </div>
+                               </div>
+                           </div>
                        </Panel>
                         <Panel
                             marginTop="medium"
                             title={'Tutor'}
                             className={styles.generalPanel}
                         >
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Frontend basics course
-                                            </td>
-                                            <td>
-                                                3 months
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Regularity
-                                            </td>
-                                            <td>
-                                                twice per week
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Number of attendees
-                                            </td>
-                                            <td>
-                                                <JustText
-                                                    text={'{#8|only 5 survived#}'}
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Includes
-                                            </td>
-                                            <td>
-                                                HTML, CSS, JavaScript, jQuery, Asynchronous requests, Responsive layout
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div className={styles.table}>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
+                                            Frontend basics course
+                                        </div>
+                                        <div className={styles.td}>
+                                            3 months
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
+                                            Regularity
+                                        </div>
+                                        <div className={styles.td}>
+                                            twice per week
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
+                                            Number of attendees
+                                        </div>
+                                        <div className={styles.td}>
+                                            <JustText
+                                                text={'{#8|only 5 survived#}'}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
+                                            Includes
+                                        </div>
+                                        <div className={styles.td}>
+                                            HTML, CSS, JavaScript, jQuery, Asynchronous requests, Responsive layout
+                                        </div>
+                                    </div>
+                                </div>
                         </Panel>
                         <Panel
                             marginTop="small"
                             className={styles.generalPanel}
                         >
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>
+                            <div className={styles.table}>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Backend basics course
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         5 months
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Regularity
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         twice per week
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Number of attendees
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         6
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Includes
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         HTML, CSS, PHP, jQuery, MySQL
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </div>
+                                </div>
+                            </div>
                         </Panel>
                         <Panel
                             marginTop="medium"
                             className={styles.generalPanel}
                             title={'Experience'}
                         >
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td>
+                                <div className={styles.table}>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Freelance Web Developer
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             Jan 2018 - Present
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
                                             Company
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div className={styles.td}>
                                             Upwork
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                        </div>
+                                    </div>
+                                </div>
                         </Panel>
                         <Panel
                             marginTop="small"
                             className={styles.generalPanel}
                         >
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>
+                            <div className={styles.table}>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Chief Technology Officer
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         Jun 2012 - Dec 2017
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         Company
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         <img className={styles.wsLogo} src={wsSmall} alt=""/>
                                         <JustText
                                             text={'{#WhaleSoft|it is dead#}'}
                                         />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div className={styles.tr}>
+                                    <div className={styles.td}>
                                         About
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div className={styles.td}>
                                         <JustText
                                             text={'{#WhaleSoft are an ambitious and coherent team of professional programmers which specializing in web development, mobile integration, web UI/UX, application development and email marketing.|not because of me!#}'}
                                         />
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </div>
+                                </div>
+                            </div>
                         </Panel>
                         {Object.keys(skills).map(title => {
                             return (
@@ -391,18 +379,16 @@ class Main extends PureComponent {
                                     marginTop="medium"
                                     className={styles.generalPanel}
                                 >
-                                    <table>
-                                        <tbody>
+                                    <div className={styles.table}>
                                         {Object.keys(skills[title]).map(skill => {
                                             return (
-                                                <tr key={skill}>
-                                                    <td>{skill}</td>
-                                                    <td>{this.renderSkill(skills[title][skill])}</td>
-                                                </tr>
+                                                <div className={styles.tr} key={skill}>
+                                                    <div className={styles.td}>{skill}</div>
+                                                    <div className={styles.td}>{this.renderSkill(skills[title][skill])}</div>
+                                                </div>
                                             )
                                         })}
-                                        </tbody>
-                                    </table>
+                                    </div>
                                 </Panel>
                             )
                         })}

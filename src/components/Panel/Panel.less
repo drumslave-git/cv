@@ -1,3 +1,5 @@
+@import "~@/variables.less";
+
 .panel{
   max-width: 1000px;
   width: 100%;
@@ -20,7 +22,7 @@
   }
 
   &.topLine {
-    border-top: 5px solid #ae0001;
+    border-top: 5px solid @redColor;
   }
 
   .title{
@@ -30,5 +32,13 @@
     text-transform: uppercase;
     padding: 10px 0 10px 10px;
     opacity: .8;
+  }
+}
+
+@media screen and (max-width: 1050px){
+  .panel {
+    .title {
+      right: 2%;
+    }
   }
 }

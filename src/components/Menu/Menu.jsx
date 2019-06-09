@@ -16,19 +16,25 @@ const picSwitchDelay = 10000;
 
 class Menu extends React.PureComponent {
     img = null;
-    picRef = React.createRef();
+    picRef = null;
     currentRend = 0;
+
+    state = {
+        visibleMenu: window.innerWidth > 700,
+    };
 
     constructor(props) {
         super(props);
         EE.on('say', this.onSay);
+
+        window.addEventListener('resize', this.handleWindowResize);
     }
 
     componentDidMount() {
         this.img = new Image();
         this.img.onload = () => {
-            if(this.picRef.current){
-                this.picRef.current.style.backgroundImage = `url("${this.img.src}")`;
+            if(this.picRef){
+                this.picRef.style.backgroundImage = `url("${this.img.src}")`;
             }
         };
         setTimeout(() => {
@@ -40,8 +46,8 @@ class Menu extends React.PureComponent {
                 if(this.currentRend % 3 === 0) {
                     this.img.src = `https://api.adorable.io/avatars/90/${this.currentRend}`;
                 }else{
-                    if(this.picRef.current) {
-                        this.picRef.current.style.backgroundImage = '';
+                    if(this.picRef) {
+                        this.picRef.style.backgroundImage = '';
                     }
                 }
             }, picSwitchDelay)
@@ -54,17 +60,54 @@ class Menu extends React.PureComponent {
 
     onPicClick = () => {
         EE.emit('picClicked');
-        this.picRef.current.classList.toggle(style.active);
+        this.picRef.classList.toggle(style.active);
+    };
+
+    toggleMenu = () => {
+        this.setState({visibleMenu: !this.state.visibleMenu})
+    };
+
+    handleWindowResize = () => {
+        const visibleMenu = window.innerWidth > 700;
+        if(this.state.visibleMenu !== visibleMenu){
+            this.setState({visibleMenu});
+        }
     };
 
     render() {
+        const {visibleMenu} = this.state;
         return (
             <div className={style.menuWrapper}>
-                <ul className={style.menu}>{this.props.items.map((item, idx) => <MenuItem key={idx} {...item} />)}</ul>
+                {visibleMenu && (
+                    <>
+                    <div className={style.humbPlaceholder}>
+                        <i className="fas fa-bars"/>
+                    </div>
+                    <div className={style.overlay} onClick={this.toggleMenu} />
+                    </>
+                )}
+                <ul className={cn(
+                    style.menu,
+                    {[style.hidden]: !visibleMenu},
+                    {[style.visible]: visibleMenu}
+                    )}>
+                    <li className={style.humb} onClick={this.toggleMenu}>
+                        {visibleMenu && (
+                            <i className="fas fa-times"/>
+                        )}
+                        {!visibleMenu && (
+                            <i className="fas fa-bars"/>
+                        )}
+                    </li>
+                    {this.props.items.map((item, idx) => <MenuItem
+                        key={idx}
+                        {...item}
+                    />)}
+                </ul>
                 <div className={style.I}>
                     <div
                         className={cn(style.picture, "glitchBlock")}
-                        ref={this.picRef}
+                        ref={r => this.picRef = r}
                         onClick={this.onPicClick}
                     />
                 </div>
@@ -75,6 +118,7 @@ class Menu extends React.PureComponent {
 
     componentWillUnmount() {
         EE.off('say', this.onSay);
+        window.removeEventListener('resize', this.handleWindowResize);
     }
 
 }

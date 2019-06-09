@@ -10,6 +10,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
                 exclude: /node_modules/,
+                include: path.resolve(__dirname, 'src'),
                 use: [
                     {
                         loader: 'babel-loader',
@@ -22,6 +23,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        // include: path.resolve(__dirname, 'src'),
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" }
@@ -29,6 +31,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: "style-loader"
@@ -48,10 +51,12 @@ module.exports = {
       },
       {
         test: /\.(gif|svg|jpg|png)$/,
+        include: path.resolve(__dirname, 'src'),
         loader: "file-loader",
       },
       {
         test: /\.html$/,
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: "html-loader",
@@ -62,7 +67,8 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    // symlinks: false,
+    extensions: ['.map', '.less', '.css','.js', '.jsx'],
     modules:    [
       path.resolve(__dirname, 'src'),
       'node_modules',
@@ -75,7 +81,7 @@ module.exports = {
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.[hash].js'
   },
   optimization: {
     splitChunks: {

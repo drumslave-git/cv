@@ -1,3 +1,5 @@
+@import "~@/variables.less";
+
 .menuWrapper {
 	padding: 20px;
 	background: rgba(13, 13, 13, 0.7);
@@ -46,6 +48,58 @@
 
 		&.active{
 			border: 5px solid #ae0001;
+		}
+	}
+}
+
+.humb, .humbPlaceholder{
+	display: none;
+	color: #ffffff;
+	font-size: 2em;
+}
+.overlay{
+	display: none;
+}
+@media screen and (max-width: 700px){
+	.humb{
+		display: block;
+	}
+	.humbPlaceholder{
+		display: block;
+	}
+	.overlay{
+		display: block;
+		position: fixed;
+		z-index: 2;
+		width: 100vw;
+		height: 100vh;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,.5);
+	}
+	.menu{
+		&.hidden{
+			li:not(.humb){
+				display: none;
+			}
+		}
+
+		&.visible{
+			z-index: 3;
+			position: fixed;
+			left: 0;
+			top: 0;
+			height: 100vh;
+			overflow: auto;
+			padding: 5%;
+			background: black;
+			border-right: 5px solid @redColor;
+
+			li:not(.humb){
+				display: block;
+				font-size: 2em;
+				margin-top: 1em;
+			}
 		}
 	}
 }

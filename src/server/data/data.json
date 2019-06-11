@@ -1,0 +1,40 @@
+{
+  "skills": {
+    "main": {
+      "HTML": 9,
+      "CSS": 9,
+      "JavaScript": 8,
+      "PHP": 7,
+      "MySQL": 7
+    },
+    "UI Libs / Frameworks": {
+      "React": 8,
+      "Angular": 3,
+      "jQuery": 8,
+      "Backbone": 5,
+      "Bootstrap": 7,
+      "Materialize.css": 5,
+      "Bulma": 3
+    },
+    "CMS / Frameworks": {
+      "OpenCart": 8,
+      "Magento": 5,
+      "WordPress": 7,
+      "MOBx": 7,
+      "YII": 3,
+      "CodeIgniter": 8
+    },
+    "other": {
+      "Adobe Photoshop": 6,
+      "Adobe After Effect": 3,
+      "3D Studio Max": 4
+    }
+  },
+  "info": {
+    "general": {
+      "firstname": "{#George|Drum#}",
+      "lastname": "{#Tislenko|Slave#}",
+      "position": "{#Full stack web developer (PHP + JS)|React one love#}"
+    }
+  }
+}

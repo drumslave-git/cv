@@ -2,6 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames'
 
+import {User} from '@/server/controllers/User';
+import {I18n} from '@/server/controllers/I18n';
+import {Api} from '@/server/controllers/Api';
+
+
 import {EE, say} from "@/helpers/EE";
 import {randInt} from "@/helpers/general";
 
@@ -13,38 +18,18 @@ import styles from './Main.less';
 
 import wsSmall from '@assets/wsSmall.jpg'
 
-const skills = {
-    main:
-        {
-            HTML: 9,
-            CSS: 9,
-            JavaScript: 8,
-            PHP: 7,
-            MySQL: 7
-        },
-    'UI Libs / Frameworks': {
-        React: 8,
-        Angular: 3,
-        jQuery: 8,
-        Backbone: 5,
-        Bootstrap: 7,
-        'Materialize.css': 5,
-        Bulma: 3
-    },
-    'CMS / Frameworks': {
-        OpenCart: 8,
-        Magento: 5,
-        WordPress: 7,
-        MOBx: 7,
-        YII: 3,
-        CodeIgniter: 8,
-    },
-    other: {
-        'Adobe Photoshop': 6,
-        'Adobe After Effect': 3,
-        '3D Studio Max': 4,
+const skills = Api.get('skills');
+
+function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
     }
-};
+    return age;
+}
 
 class Main extends PureComponent {
     constructor(props){
@@ -118,75 +103,73 @@ class Main extends PureComponent {
                            topLine
                            marginTop="big"
                            className={cn(styles.generalPanel, styles.mainPanel)}
-                           title="General"
+                           title={I18n.get('general')}
                        >
                            <div className={styles.mainPicture} ref={this.mainPictureRef} />
                            <div className={styles.mainInfo}>
                                <div className={styles.table}>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Name
+                                            {I18n.get('name')}
                                         </div>
                                         <div className={styles.td}>
                                             <JustText
-                                                text={'{#George|Drum#}'}
+                                                text={`{#${User.info.firstname}|${User.info.altfirstname}#}`}
                                             />
                                         </div>
                                     </div>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Last Name
+                                            {I18n.get('lastname')}
                                         </div>
                                         <div className={styles.td}>
                                             <JustText
-                                                text={'{#Tislenko|Slave#}'}
+                                                text={`{#${User.info.lastname}|${User.info.altlastname}#}`}
                                             />
                                         </div>
                                     </div>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Job Title
+                                            {I18n.get('jobTitle')}
                                         </div>
                                         <div className={styles.td}>
                                             <JustText
-                                                text={'{#Full stack web developer (PHP + JS)|React one love#}'}
+                                                text={`{#${User.info.jobTitle}|${User.info.altJobTitle}#}`}
                                             />
                                         </div>
                                     </div>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Age
+                                            {I18n.get('age')}
                                         </div>
                                         <div className={styles.td}>
                                             <JustText
-                                                text={`${27 + randInt(1, 2)}`}
+                                                text={`${getAge(User.info.birth) + randInt(0, 1)}`}
                                             />
                                         </div>
                                     </div>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Location
+                                            {I18n.get('location')}
                                         </div>
                                         <div className={styles.td}>
-                                            Ukraine, Dnipro
-                                        </div>
-                                    </div>
-                                    <div className={styles.tr}>
-                                        <div className={styles.td}>
-                                            Languages
-                                        </div>
-                                        <div className={styles.td}>
-                                            Russian, Ukrainian, English
+                                            {User.info.location}
                                         </div>
                                     </div>
                                     <div className={styles.tr}>
                                         <div className={styles.td}>
-                                            Intro
+                                            {I18n.get('languages')}
                                         </div>
                                         <div className={styles.td}>
-                                            Courteous and enthusiastic, I am interested in IT and everything in its orbit. I recently began to be fascinated by web programming, e.g. developing apps and building websites. Invited to join my friend's start-up company as a front-end developer, I gained experience of working in this area.
-                                            As this area complements my studies, I am keen to gain more experience in the field. For this reason, I am looking for a company willing to offer me a placement among their developers. In return, I would offer my full commitment, and be a pleasant and friendly addition to your team.
-                                            I am therefore currently looking for a job or an internship as a front-end developer.
+                                            {User.info.languages}
+                                        </div>
+                                    </div>
+                                    <div className={styles.tr}>
+                                        <div className={styles.td}>
+                                            {I18n.get('intro')}
+                                        </div>
+                                        <div className={styles.td}>
+                                            {User.info.intro}
                                         </div>
                                     </div>
                                </div>
@@ -194,7 +177,7 @@ class Main extends PureComponent {
                        </Panel>
                        <Panel
                            marginTop="medium"
-                           title={'Education'}
+                           title={I18n.get('education')}
                            className={styles.generalPanel}
                        >
                            <div className={styles.table}>
@@ -232,7 +215,7 @@ class Main extends PureComponent {
                        </Panel>
                         <Panel
                             marginTop="medium"
-                            title={'Tutor'}
+                            title={I18n.get('tutor')}
                             className={styles.generalPanel}
                         >
                                 <div className={styles.table}>
@@ -314,7 +297,7 @@ class Main extends PureComponent {
                         <Panel
                             marginTop="medium"
                             className={styles.generalPanel}
-                            title={'Experience'}
+                            title={I18n.get('experience')}
                         >
                                 <div className={styles.table}>
                                     <div className={styles.tr}>
@@ -375,7 +358,7 @@ class Main extends PureComponent {
                             return (
                                 <Panel
                                     key={title}
-                                    title={`Skills: ${title}`}
+                                    title={`${I18n.get('skills')}: ${title}`}
                                     marginTop="medium"
                                     className={styles.generalPanel}
                                 >
